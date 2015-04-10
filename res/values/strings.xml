@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">高小德用车</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="car_use_title">我要用车</string>
+ <string name="destination_button">输入目的地</string>
+ <string name="cancel_button">取消</string>
+ <string name="destination_title">请输入目的地</string>
+</resources>
