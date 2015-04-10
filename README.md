@@ -65,13 +65,18 @@ poiSearchTask.search(mDestinaionText.getText().toString(),RouteTask.getInstance(
 
 拷贝RouteTask.java文件到创建的工程中，参照MainActivity.java文件中的示例代码，实现OnRouteCalculateListener接口。调用的核心方法如下：
 ``` java
-@Override//OnRouteCalculateListener提供的onCost回调函数，高小德用车已经将返回cost结果的代码完整封装
-	public void onCost(float cost) {
+	@Override //OnRouteCalculateListener提供的onRouteCalculate回调函数，高小德用车已经将返回onRouteCalculate结果的代码完整封装
+	public void onRouteCalculate(float cost,float distance,int duration) {
 		mDestinationContainer.setVisibility(View.VISIBLE);
-		mCostContainer.setVisibility(View.VISIBLE);
+	
+		mRouteCostText.setVisibility(View.VISIBLE);
 		mDesitinationText.setText(RouteTask
 				.getInstance(getApplicationContext()).getEndPoint().address);
-		mRouteCostText.setText("￥ " + cost);
-
+		mRouteCostText.setText(
+				String.format("预估费用%.2f元，距离%.1fkm,用时%d分", cost,distance,duration)
+				 );
+		mDestinationButton.setText("我要用车");
+		mCancelButton.setVisibility(View.VISIBLE);
+		mDestinationButton.setOnClickListener(null);
 	}
 ```
