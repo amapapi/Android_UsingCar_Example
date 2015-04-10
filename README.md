@@ -32,12 +32,12 @@ Utils.java封装了在地图上打点的功能，如下调用即可。
 Utils.addEmulateData(mAmap, mStartPosition);//调用addEmulateData方法。参数解释：参数一为地图的controller；参数二为模拟数据的中心点，真实数据可以传递数据列表。
 ```
 ###Step 2 输入提示+POI搜索，搞定目的地
-	完成了以上这三大要点之后，接下来需要告诉司机师傅乘客要去哪里了。如下图所示，为了给用户提供一个更好的用车体验，在支持录入目的地的功能基础上，提供输入提示+POI搜索功能，进一步提升体验。
- ![Screenshot](https://raw.githubusercontent.com/amapapi/Android_UsingCar_Example/master/pic/search.png)   
+完成了以上这三大要点之后，接下来需要告诉司机师傅乘客要去哪里了。如下图所示，为了给用户提供一个更好的用车体验，在支持录入目的地的功能基础上，提供输入提示+POI搜索功能，进一步提升体验。
+![Screenshot](https://raw.githubusercontent.com/amapapi/Android_UsingCar_Example/master/pic/search.png)   
 
 ###输入提示
 
- 拷贝InputTipTask.java到创建的工程中，查看DestinationActivity.java示例，实现TextWatcher接口后，进行如下调用：
+拷贝InputTipTask.java到创建的工程中，查看DestinationActivity.java示例，实现TextWatcher接口后，进行如下调用：
 ``` java
 @Override//在onTextChanged方法中调用InputTipTask 的getInstance方法
 	public void onTextChanged(CharSequence s, int start, int before, int count) {

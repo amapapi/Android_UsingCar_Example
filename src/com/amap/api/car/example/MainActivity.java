@@ -70,10 +70,13 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		init(savedInstanceState);
 		mLocationTask = LocationTask.getInstance(getApplicationContext());
 		mLocationTask.setOnLocationGetListener(this);
-
+		mRegeocodeTask = new RegeocodeTask(getApplicationContext());
+		RouteTask.getInstance(getApplicationContext())
+		.addRouteCalculateListener(this);
 	}
 
 	private void init(Bundle savedInstanceState) {
+		
 		mAddressTextView = (TextView) findViewById(R.id.address_text);
 		mDestinationButton = (Button) findViewById(R.id.destination_button);
 		mDestinationButton.setOnClickListener(this);
@@ -83,7 +86,7 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		mAmap.getUiSettings().setZoomControlsEnabled(false);
 		mAmap.setOnMapLoadedListener(this);
 		mAmap.setOnCameraChangeListener(this);
-		mRegeocodeTask = new RegeocodeTask(getApplicationContext());
+		
 		mDestinationContainer = (LinearLayout) findViewById(R.id.destination_container);
 		mRouteCostText = (TextView) findViewById(R.id.routecost_text);
 		mDesitinationText = (TextView) findViewById(R.id.destination_text);
@@ -92,8 +95,7 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		mLocationImage.setOnClickListener(this);
 		mFromToContainer = (LinearLayout) findViewById(R.id.fromto_container);
 		mCancelButton=(Button) findViewById(R.id.cancel_button);
-		RouteTask.getInstance(getApplicationContext())
-				.addRouteCalculateListener(this);
+	
 
 	}
 
@@ -124,7 +126,9 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 				.search(mStartPosition.latitude, mStartPosition.longitude);
 		if (mIsFirst) {
 			Utils.addEmulateData(mAmap, mStartPosition);
+			if(mPositionMark!=null){
 			mPositionMark.setToTop();
+			}
 			mIsFirst = false;
 		}
 	}
