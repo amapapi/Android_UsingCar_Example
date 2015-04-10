@@ -44,7 +44,6 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 
 	private LinearLayout mDestinationContainer;
 
-
 	private TextView mRouteCostText;
 
 	private TextView mDesitinationText;
@@ -54,10 +53,12 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 	private ImageView mLocationImage;
 
 	private LinearLayout mFromToContainer;
-	
+
 	private Button mCancelButton;
 
 	private boolean mIsFirst = true;
+
+	private boolean mIsRouteSuccess = false;
 
 	public interface OnGetLocationListener {
 		public void getLocation(String locationAddress);
@@ -72,11 +73,11 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		mLocationTask.setOnLocationGetListener(this);
 		mRegeocodeTask = new RegeocodeTask(getApplicationContext());
 		RouteTask.getInstance(getApplicationContext())
-		.addRouteCalculateListener(this);
+				.addRouteCalculateListener(this);
 	}
 
 	private void init(Bundle savedInstanceState) {
-		
+
 		mAddressTextView = (TextView) findViewById(R.id.address_text);
 		mDestinationButton = (Button) findViewById(R.id.destination_button);
 		mDestinationButton.setOnClickListener(this);
@@ -86,7 +87,7 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		mAmap.getUiSettings().setZoomControlsEnabled(false);
 		mAmap.setOnMapLoadedListener(this);
 		mAmap.setOnCameraChangeListener(this);
-		
+
 		mDestinationContainer = (LinearLayout) findViewById(R.id.destination_container);
 		mRouteCostText = (TextView) findViewById(R.id.routecost_text);
 		mDesitinationText = (TextView) findViewById(R.id.destination_text);
@@ -94,8 +95,7 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		mLocationImage = (ImageView) findViewById(R.id.location_image);
 		mLocationImage.setOnClickListener(this);
 		mFromToContainer = (LinearLayout) findViewById(R.id.fromto_container);
-		mCancelButton=(Button) findViewById(R.id.cancel_button);
-	
+		mCancelButton = (Button) findViewById(R.id.cancel_button);
 
 	}
 
@@ -109,7 +109,9 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 	private void showView() {
 		mFromToContainer.setVisibility(View.VISIBLE);
 		mDestinationButton.setVisibility(View.VISIBLE);
-		mCancelButton.setVisibility(View.VISIBLE);
+		if (mIsRouteSuccess) {
+			mCancelButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
@@ -126,8 +128,8 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 				.search(mStartPosition.latitude, mStartPosition.longitude);
 		if (mIsFirst) {
 			Utils.addEmulateData(mAmap, mStartPosition);
-			if(mPositionMark!=null){
-			mPositionMark.setToTop();
+			if (mPositionMark != null) {
+				mPositionMark.setToTop();
 			}
 			mIsFirst = false;
 		}
@@ -177,11 +179,10 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 		markerOptions.setFlat(true);
 		markerOptions.anchor(0.5f, 0.5f);
 		markerOptions.position(new LatLng(0, 0));
-		markerOptions.icon(
-				BitmapDescriptorFactory.fromBitmap(
-				BitmapFactory.decodeResource(getResources(), R.drawable.icon_loaction_start)
-			)	
-		);
+		markerOptions
+				.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+						.decodeResource(getResources(),
+								R.drawable.icon_loaction_start)));
 		mPositionMark = mAmap.addMarker(markerOptions);
 
 		mPositionMark.setPositionByPixels(mMapView.getWidth() / 2,
@@ -230,15 +231,14 @@ public class MainActivity extends Activity implements OnCameraChangeListener,
 	}
 
 	@Override
-	public void onRouteCalculate(float cost,float distance,int duration) {
+	public void onRouteCalculate(float cost, float distance, int duration) {
 		mDestinationContainer.setVisibility(View.VISIBLE);
-	
+		mIsRouteSuccess = true;
 		mRouteCostText.setVisibility(View.VISIBLE);
 		mDesitinationText.setText(RouteTask
 				.getInstance(getApplicationContext()).getEndPoint().address);
-		mRouteCostText.setText(
-				String.format("预估费用%.2f元，距离%.1fkm,用时%d分", cost,distance,duration)
-				 );
+		mRouteCostText.setText(String.format("预估费用%.2f元，距离%.1fkm,用时%d分", cost,
+				distance, duration));
 		mDestinationButton.setText("我要用车");
 		mCancelButton.setVisibility(View.VISIBLE);
 		mDestinationButton.setOnClickListener(null);
