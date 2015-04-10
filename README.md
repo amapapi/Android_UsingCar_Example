@@ -6,7 +6,7 @@
 搭建出行类用车乘客端的LBS部分，仅需要以下三步：
 ###Step 1：定位+逆地理编码+地图打点，搞定前端展示
 效果如下图。屏幕中间的蓝色标记 用到了定位功能。位于顶部的输入框 用到了逆地理编码功能；地图上蓝色的出租车标识 运用了地图打点。
-![Screenshot](https://raw.githubusercontent.com/amapapi/Android_UsingCar_Example/master/pic/marker.png)   
+![Screenshot](https://raw.githubusercontent.com/amapapi/Android_UsingCar_Example/master/pic/mark.png)   
 ###定位
 需要做的仅仅是将libs下的库拷贝到你的工程中，打开高小德用车的源代码，将LocationTask.java拷贝到工程中，找到MainActivity.java文件，仿照其中的写法，在合适的位置调用如下这几行，即可调起定位功能。
 ``` java
@@ -65,13 +65,18 @@ poiSearchTask.search(mDestinaionText.getText().toString(),RouteTask.getInstance(
 
 拷贝RouteTask.java文件到创建的工程中，参照MainActivity.java文件中的示例代码，实现OnRouteCalculateListener接口。调用的核心方法如下：
 ``` java
-@Override//OnRouteCalculateListener提供的onCost回调函数，高小德用车已经将返回cost结果的代码完整封装
-	public void onCost(float cost) {
+	@Override //OnRouteCalculateListener提供的onRouteCalculate回调函数，高小德用车已经将返回onRouteCalculate结果的代码完整封装
+	public void onRouteCalculate(float cost,float distance,int duration) {
 		mDestinationContainer.setVisibility(View.VISIBLE);
-		mCostContainer.setVisibility(View.VISIBLE);
+	
+		mRouteCostText.setVisibility(View.VISIBLE);
 		mDesitinationText.setText(RouteTask
 				.getInstance(getApplicationContext()).getEndPoint().address);
-		mRouteCostText.setText("￥ " + cost);
-
+		mRouteCostText.setText(
+				String.format("预估费用%.2f元，距离%.1fkm,用时%d分", cost,distance,duration)
+				 );
+		mDestinationButton.setText("我要用车");
+		mCancelButton.setVisibility(View.VISIBLE);
+		mDestinationButton.setOnClickListener(null);
 	}
 ```
