@@ -18,11 +18,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 
 /**  
@@ -85,7 +86,10 @@ public class DestinationActivity extends Activity implements OnClickListener,Tex
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		
+		if(RouteTask.getInstance(getApplicationContext()).getStartPoint()==null){
+			Toast.makeText(getApplicationContext(), "检查网络，Key等问题", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		InputTipTask.getInstance(getApplicationContext(), mRecomandAdapter).searchTips(s.toString(),
 				RouteTask.getInstance(getApplicationContext()).getStartPoint().city);
 		
